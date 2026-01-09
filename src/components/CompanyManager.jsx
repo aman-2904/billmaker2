@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCompanies, saveCompany, updateCompany, deleteCompany, uploadLogo } from '../services/companyService';
+import { getCompanies, saveCompany, updateCompany, deleteCompany, uploadLogo, uploadSignature } from '../services/companyService';
 import Icons, { ICON_SIZES } from './icons';
 
 function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
@@ -15,10 +15,9 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         email: '',
         panNumber: '',
         address: '',
-        panNumber: '',
-        address: '',
         tagline: '',
-        logoUrl: ''
+        logoUrl: '',
+        signatureUrl: ''
     });
 
     const [formData, setFormData] = useState({
@@ -26,11 +25,10 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         sellerAddress: '',
         sellerPhone: '',
         sellerGST: '',
-        sellerPAN: '',
-        sellerEmail: '',
         sellerEmail: '',
         sellerTagline: '',
-        logoUrl: ''
+        logoUrl: '',
+        signatureUrl: ''
     });
 
     const [logoFile, setLogoFile] = useState(null);
@@ -67,11 +65,10 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
             sellerAddress: company.address,
             sellerPhone: company.phone,
             sellerGST: company.gst_number,
-            sellerPAN: company.pan_number || '',
-            sellerEmail: company.email,
             sellerEmail: company.email,
             sellerTagline: company.tagline || '',
-            logoUrl: company.logo_url || ''
+            logoUrl: company.logo_url || '',
+            signatureUrl: company.signature_url || ''
         });
         setLogoFile(null);
     }
@@ -105,6 +102,26 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         } catch (err) {
             console.error('Logo upload failed:', err);
             setError('Failed to upload logo. Please try again or use a URL.');
+        } finally {
+            setIsUploading(false);
+        }
+    }
+
+    async function handleSignatureUpload(file, isQuickAdd = false) {
+        if (!file) return;
+
+        try {
+            setIsUploading(true);
+            const url = await uploadSignature(file);
+
+            if (isQuickAdd) {
+                setNewCompanyData(prev => ({ ...prev, signatureUrl: url }));
+            } else {
+                setFormData(prev => ({ ...prev, signatureUrl: url }));
+            }
+        } catch (err) {
+            console.error('Signature upload failed:', err);
+            setError('Failed to upload signature. Please try again or use a URL.');
         } finally {
             setIsUploading(false);
         }
@@ -166,7 +183,8 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                 sellerPAN: newCompanyData.panNumber.trim() || '',
                 sellerAddress: newCompanyData.address.trim() || '',
                 sellerTagline: newCompanyData.tagline.trim() || '',
-                logoUrl: newCompanyData.logoUrl || ''
+                logoUrl: newCompanyData.logoUrl || '',
+                signatureUrl: newCompanyData.signatureUrl || ''
             };
 
             const savedCompany = await saveCompany(companyData);
@@ -184,7 +202,8 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                 email: '',
                 panNumber: '',
                 address: '',
-                tagline: ''
+                tagline: '',
+                signatureUrl: ''
             });
 
             // Auto-select the newly created company
@@ -238,7 +257,8 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                 sellerGST: '',
                 sellerPAN: '',
                 sellerEmail: '',
-                sellerTagline: ''
+                sellerTagline: '',
+                signatureUrl: ''
             });
             onCompanySaved();
         } catch (err) {
@@ -448,6 +468,32 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                         </div>
                                     )}
                                 </div>
+                                <div className="form-group full-width">
+                                    <label>Authorized Signature</label>
+                                    <div className="logo-upload-container" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleSignatureUpload(e.target.files[0], true)}
+                                            disabled={loading || isUploading}
+                                        />
+                                        <span style={{ margin: '0 5px' }}>OR</span>
+                                        <input
+                                            type="text"
+                                            placeholder="https://example.com/signature.png"
+                                            value={newCompanyData.signatureUrl}
+                                            onChange={(e) => setNewCompanyData({ ...newCompanyData, signatureUrl: e.target.value })}
+                                            disabled={loading}
+                                            style={{ flex: 1 }}
+                                        />
+                                    </div>
+                                    {isUploading && <small>Uploading signature...</small>}
+                                    {newCompanyData.signatureUrl && (
+                                        <div style={{ marginTop: '5px' }}>
+                                            <img src={newCompanyData.signatureUrl} alt="Signature Preview" style={{ height: '40px', objectFit: 'contain' }} />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="quick-add-actions">
@@ -569,6 +615,31 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                         </div>
                                     )}
                                 </div>
+                                <div className="form-group full-width">
+                                    <label>Authorized Signature</label>
+                                    <div className="logo-upload-container" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleSignatureUpload(e.target.files[0], false)}
+                                            disabled={loading || isUploading}
+                                        />
+                                        <span style={{ margin: '0 5px' }}>OR</span>
+                                        <input
+                                            type="text"
+                                            placeholder="https://example.com/signature.png"
+                                            value={formData.signatureUrl}
+                                            onChange={(e) => setFormData({ ...formData, signatureUrl: e.target.value })}
+                                            style={{ flex: 1 }}
+                                        />
+                                    </div>
+                                    {isUploading && <small>Uploading signature...</small>}
+                                    {formData.signatureUrl && (
+                                        <div style={{ marginTop: '5px' }}>
+                                            <img src={formData.signatureUrl} alt="Signature Preview" style={{ height: '40px', objectFit: 'contain' }} />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="form-actions">
@@ -584,7 +655,10 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                             sellerGST: '',
                                             sellerPAN: '',
                                             sellerEmail: '',
-                                            sellerTagline: ''
+                                            sellerPAN: '',
+                                            sellerEmail: '',
+                                            sellerTagline: '',
+                                            signatureUrl: ''
                                         });
                                     }}
                                 >

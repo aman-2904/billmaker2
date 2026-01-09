@@ -81,6 +81,37 @@ export async function uploadLogo(file) {
 }
 
 /**
+ * Upload signature to Supabase Storage
+ * @param {File} file - The file object to upload
+ * @returns {Promise<string>} Public URL of the uploaded file
+ */
+export async function uploadSignature(file) {
+    try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `sig_${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { data, error } = await supabase.storage
+            .from('company-logos')
+            .upload(filePath, file);
+
+        if (error) {
+            throw error;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+            .from('company-logos')
+            .getPublicUrl(filePath);
+
+        return publicUrl;
+    } catch (error) {
+        console.error('Error uploading signature:', error);
+        throw error;
+    }
+}
+
+
+/**
  * Save a new company to database
  * @param {Object} companyData - Company form data
  * @returns {Promise<Object>} Created company object
@@ -97,7 +128,9 @@ export async function saveCompany(companyData) {
                 pan_number: companyData.sellerPAN || null,
                 email: companyData.sellerEmail,
                 tagline: companyData.sellerTagline || null,
-                logo_url: companyData.logoUrl || null
+                tagline: companyData.sellerTagline || null,
+                logo_url: companyData.logoUrl || null,
+                signature_url: companyData.signatureUrl || null
             }])
             .select()
             .single();
@@ -138,7 +171,9 @@ export async function updateCompany(id, companyData) {
                 pan_number: companyData.sellerPAN || null,
                 email: companyData.sellerEmail,
                 tagline: companyData.sellerTagline || null,
-                logo_url: companyData.logoUrl || null
+                tagline: companyData.sellerTagline || null,
+                logo_url: companyData.logoUrl || null,
+                signature_url: companyData.signatureUrl || null
             })
             .eq('id', id)
             .select()

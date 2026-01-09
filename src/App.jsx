@@ -23,6 +23,7 @@ function App() {
     sellerPAN: '',
     sellerEmail: '',
     sellerTagline: '',
+    sellerSignature: '',
     buyerName: '',
     buyerAddress: '',
     buyerGST: '',
@@ -96,6 +97,7 @@ function App() {
         sellerPAN: '',
         sellerEmail: '',
         sellerTagline: '',
+        sellerSignature: '',
         buyerName: '',
         buyerAddress: '',
         buyerGST: '',
@@ -130,7 +132,8 @@ function App() {
         sellerPAN: company.pan_number || '',
         sellerEmail: company.email,
         sellerTagline: company.tagline || '',
-        logoUrl: company.logo_url || ''
+        logoUrl: company.logo_url || '',
+        sellerSignature: company.signature_url || ''
       }));
       setSelectedCompany(company);
     } else {

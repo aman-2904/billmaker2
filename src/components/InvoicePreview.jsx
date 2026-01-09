@@ -2,6 +2,7 @@ import { forwardRef, useState, useEffect } from 'react';
 
 const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, amountInWords }, ref) => {
     const [logoBase64, setLogoBase64] = useState('');
+    const [signatureBase64, setSignatureBase64] = useState('');
 
     useEffect(() => {
         const convertLogoToBase64 = async () => {
@@ -25,6 +26,29 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
 
         convertLogoToBase64();
     }, [formData.logoUrl]);
+
+    useEffect(() => {
+        const convertSignatureToBase64 = async () => {
+            if (formData.sellerSignature) {
+                try {
+                    const response = await fetch(formData.sellerSignature, { mode: 'cors' });
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setSignatureBase64(reader.result);
+                    };
+                    reader.readAsDataURL(blob);
+                } catch (error) {
+                    console.error('Error converting signature to base64:', error);
+                    setSignatureBase64(formData.sellerSignature); // Fallback
+                }
+            } else {
+                setSignatureBase64('');
+            }
+        };
+
+        convertSignatureToBase64();
+    }, [formData.sellerSignature]);
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -256,9 +280,6 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                     {/* Footer Section */}
                     <div className="invoice-footer">
                         <div className="footer-left">
-                            <div className="for-company">For {formData.sellerName}</div>
-                            <div className="signature-space"></div>
-                            <div className="auth-signatory">Declaration <strong>Authorized Signatory</strong></div>
                             <div className="declaration-text">
                                 We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
                             </div>
@@ -266,6 +287,18 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                         <div className="footer-right">
                             <div className="stamp-area">
                                 <div className="stamp-placeholder">For {formData.sellerName.toUpperCase()}</div>
+                                {signatureBase64 || formData.sellerSignature ? (
+                                    <div className="signature-container" style={{ marginTop: '10px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <img
+                                            src={signatureBase64 || formData.sellerSignature}
+                                            alt="Authorized Signature"
+                                            style={{ maxHeight: '60px', maxWidth: '100%', objectFit: 'contain' }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div style={{ height: '60px' }}></div>
+                                )}
+                                <div className="auth-signatory">Authorized Signatory</div>
                             </div>
                         </div>
                     </div>
