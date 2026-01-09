@@ -44,6 +44,7 @@ function App() {
   ]);
 
   const [gstRate, setGstRate] = useState(18);
+  const [gstType, setGstType] = useState('');
   const invoiceRef = useRef(null);
 
   // Supabase integration state
@@ -173,7 +174,8 @@ function App() {
           poDate: formData.poDate,
           dispatchThrough: formData.dispatchThrough,
           destination: formData.destination,
-          termsOfDelivery: formData.termsOfDelivery
+          termsOfDelivery: formData.termsOfDelivery,
+          gstType: gstType
         },
         items: items,
         gstRate: gstRate,
@@ -210,8 +212,10 @@ function App() {
       poDate: quotation.invoice_details?.poDate || '',
       dispatchThrough: quotation.invoice_details?.dispatchThrough || '',
       destination: quotation.invoice_details?.destination || '',
+      destination: quotation.invoice_details?.destination || '',
       termsOfDelivery: quotation.invoice_details?.termsOfDelivery || ''
     }));
+    setGstType(quotation.invoice_details?.gstType || '');
     setItems((quotation.items || []).map(item => ({
       ...item,
       rate: item.rate || (item.unit ? item.amount / item.unit : 0),
@@ -285,7 +289,8 @@ function App() {
           poDate: formData.poDate,
           dispatchThrough: formData.dispatchThrough,
           destination: formData.destination,
-          termsOfDelivery: formData.termsOfDelivery
+          termsOfDelivery: formData.termsOfDelivery,
+          gstType: gstType
         },
         items: items,
         gstRate: gstRate,
@@ -358,7 +363,7 @@ function App() {
       });
   };
 
-  const totals = calculateInvoiceTotals(items, gstRate);
+  const totals = calculateInvoiceTotals(items, gstRate, gstType);
   const amountInWords = numberToWords(totals.totalAfterTax);
 
   return (
@@ -388,6 +393,7 @@ function App() {
           formData={formData}
           items={items}
           gstRate={gstRate}
+          gstType={gstType}
           totals={totals}
           amountInWords={amountInWords}
           onFormChange={handleFormChange}
@@ -400,6 +406,7 @@ function App() {
           onSaveQuotation={handleSaveQuotation}
           onViewQuotations={() => setShowQuotationList(true)}
           currentQuotationId={currentQuotationId}
+          onGstTypeChange={setGstType}
         />
       </div>
 
@@ -409,6 +416,7 @@ function App() {
         formData={formData}
         items={items}
         gstRate={gstRate}
+        gstType={gstType}
         totals={totals}
         amountInWords={amountInWords}
       />

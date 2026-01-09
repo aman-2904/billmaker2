@@ -1,6 +1,6 @@
 import { forwardRef, useState, useEffect } from 'react';
 
-const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInWords }, ref) => {
+const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, amountInWords }, ref) => {
     const [logoBase64, setLogoBase64] = useState('');
 
     useEffect(() => {
@@ -208,14 +208,40 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInW
                                 <td className="summary-label">Total Amount<br />Before Tax:</td>
                                 <td className="summary-value">{totals.totalBeforeTax.toFixed(2)}</td>
                             </tr>
-                            <tr>
-                                <td className="summary-label">Add: IGST {gstRate}%</td>
-                                <td className="summary-value">{totals.totalGST.toFixed(2)}</td>
-                            </tr>
-                            <tr>
-                                <td className="summary-label"></td>
-                                <td className="summary-value"></td>
-                            </tr>
+                            {gstType === 'CGST_SGST' ? (
+                                <>
+                                    <tr>
+                                        <td className="summary-label">Add: CGST {gstRate / 2}%</td>
+                                        <td className="summary-value">{totals.totalCGST ? totals.totalCGST.toFixed(2) : '0.00'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="summary-label">Add: SGST {gstRate / 2}%</td>
+                                        <td className="summary-value">{totals.totalSGST ? totals.totalSGST.toFixed(2) : '0.00'}</td>
+                                    </tr>
+                                </>
+                            ) : gstType === 'IGST' ? (
+                                <>
+                                    <tr>
+                                        <td className="summary-label">Add: IGST {gstRate}%</td>
+                                        <td className="summary-value">{totals.totalIGST ? totals.totalIGST.toFixed(2) : '0.00'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="summary-label"></td>
+                                        <td className="summary-value"></td>
+                                    </tr>
+                                </>
+                            ) : (
+                                <>
+                                    <tr>
+                                        <td className="summary-label">Add: IGST {gstRate}%</td>
+                                        <td className="summary-value">0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="summary-label"></td>
+                                        <td className="summary-value"></td>
+                                    </tr>
+                                </>
+                            )}
                             <tr>
                                 <td className="summary-label">Tax Amount:</td>
                                 <td className="summary-value">{totals.totalGST.toFixed(2)}</td>
