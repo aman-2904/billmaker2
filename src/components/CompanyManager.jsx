@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getCompanies, saveCompany, updateCompany, deleteCompany } from '../services/companyService';
+import { getCompanies, saveCompany, updateCompany, deleteCompany, uploadLogo } from '../services/companyService';
 import Icons, { ICON_SIZES } from './icons';
 
 function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
@@ -15,7 +15,10 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         email: '',
         panNumber: '',
         address: '',
-        tagline: ''
+        panNumber: '',
+        address: '',
+        tagline: '',
+        logoUrl: ''
     });
 
     const [formData, setFormData] = useState({
@@ -25,8 +28,13 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         sellerGST: '',
         sellerPAN: '',
         sellerEmail: '',
-        sellerTagline: ''
+        sellerEmail: '',
+        sellerTagline: '',
+        logoUrl: ''
     });
+
+    const [logoFile, setLogoFile] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -61,8 +69,11 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
             sellerGST: company.gst_number,
             sellerPAN: company.pan_number || '',
             sellerEmail: company.email,
-            sellerTagline: company.tagline || ''
+            sellerEmail: company.email,
+            sellerTagline: company.tagline || '',
+            logoUrl: company.logo_url || ''
         });
+        setLogoFile(null);
     }
 
     function handleNewCompany() {
@@ -77,6 +88,26 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
             tagline: ''
         });
         setError(null);
+    }
+
+    async function handleLogoUpload(file, isQuickAdd = false) {
+        if (!file) return;
+
+        try {
+            setIsUploading(true);
+            const url = await uploadLogo(file);
+
+            if (isQuickAdd) {
+                setNewCompanyData(prev => ({ ...prev, logoUrl: url }));
+            } else {
+                setFormData(prev => ({ ...prev, logoUrl: url }));
+            }
+        } catch (err) {
+            console.error('Logo upload failed:', err);
+            setError('Failed to upload logo. Please try again or use a URL.');
+        } finally {
+            setIsUploading(false);
+        }
     }
 
     async function saveNewCompany() {
@@ -134,7 +165,8 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                 sellerEmail: newCompanyData.email.trim().toLowerCase(),
                 sellerPAN: newCompanyData.panNumber.trim() || '',
                 sellerAddress: newCompanyData.address.trim() || '',
-                sellerTagline: newCompanyData.tagline.trim() || ''
+                sellerTagline: newCompanyData.tagline.trim() || '',
+                logoUrl: newCompanyData.logoUrl || ''
             };
 
             const savedCompany = await saveCompany(companyData);
@@ -390,6 +422,32 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                         disabled={loading}
                                     />
                                 </div>
+                                <div className="form-group full-width">
+                                    <label>Company Logo</label>
+                                    <div className="logo-upload-container" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleLogoUpload(e.target.files[0], true)}
+                                            disabled={loading || isUploading}
+                                        />
+                                        <span style={{ margin: '0 5px' }}>OR</span>
+                                        <input
+                                            type="text"
+                                            placeholder="https://example.com/logo.png"
+                                            value={newCompanyData.logoUrl}
+                                            onChange={(e) => setNewCompanyData({ ...newCompanyData, logoUrl: e.target.value })}
+                                            disabled={loading}
+                                            style={{ flex: 1 }}
+                                        />
+                                    </div>
+                                    {isUploading && <small>Uploading logo...</small>}
+                                    {newCompanyData.logoUrl && (
+                                        <div style={{ marginTop: '5px' }}>
+                                            <img src={newCompanyData.logoUrl} alt="Preview" style={{ height: '40px', objectFit: 'contain' }} />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="quick-add-actions">
@@ -485,6 +543,31 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                         value={formData.sellerTagline}
                                         onChange={(e) => setFormData({ ...formData, sellerTagline: e.target.value })}
                                     />
+                                </div>
+                                <div className="form-group full-width">
+                                    <label>Company Logo</label>
+                                    <div className="logo-upload-container" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleLogoUpload(e.target.files[0], false)}
+                                            disabled={loading || isUploading}
+                                        />
+                                        <span style={{ margin: '0 5px' }}>OR</span>
+                                        <input
+                                            type="text"
+                                            placeholder="https://example.com/logo.png"
+                                            value={formData.logoUrl}
+                                            onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                                            style={{ flex: 1 }}
+                                        />
+                                    </div>
+                                    {isUploading && <small>Uploading logo...</small>}
+                                    {formData.logoUrl && (
+                                        <div style={{ marginTop: '5px' }}>
+                                            <img src={formData.logoUrl} alt="Preview" style={{ height: '40px', objectFit: 'contain' }} />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 

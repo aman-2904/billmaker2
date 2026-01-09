@@ -51,6 +51,36 @@ export async function getCompany(id) {
 }
 
 /**
+ * Upload logo to Supabase Storage
+ * @param {File} file - The file object to upload
+ * @returns {Promise<string>} Public URL of the uploaded file
+ */
+export async function uploadLogo(file) {
+    try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { data, error } = await supabase.storage
+            .from('company-logos')
+            .upload(filePath, file);
+
+        if (error) {
+            throw error;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+            .from('company-logos')
+            .getPublicUrl(filePath);
+
+        return publicUrl;
+    } catch (error) {
+        console.error('Error uploading logo:', error);
+        throw error;
+    }
+}
+
+/**
  * Save a new company to database
  * @param {Object} companyData - Company form data
  * @returns {Promise<Object>} Created company object

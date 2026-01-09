@@ -1,6 +1,31 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState, useEffect } from 'react';
 
 const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInWords }, ref) => {
+    const [logoBase64, setLogoBase64] = useState('');
+
+    useEffect(() => {
+        const convertLogoToBase64 = async () => {
+            if (formData.logoUrl) {
+                try {
+                    const response = await fetch(formData.logoUrl, { mode: 'cors' });
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setLogoBase64(reader.result);
+                    };
+                    reader.readAsDataURL(blob);
+                } catch (error) {
+                    console.error('Error converting logo to base64:', error);
+                    setLogoBase64(formData.logoUrl); // Fallback
+                }
+            } else {
+                setLogoBase64('');
+            }
+        };
+
+        convertLogoToBase64();
+    }, [formData.logoUrl]);
+
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -19,10 +44,19 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInW
                 <div className="invoice-header">
                     <div className="company-logo-section">
                         <div className="company-logo">
-                            <div className="logo-circle">
-                                <span className="logo-text">{formData.sellerName.substring(0, 3).toUpperCase()}</span>
-                            </div>
-                            <div className="company-name-logo">{formData.sellerName.toUpperCase()}</div>
+                            {logoBase64 || formData.logoUrl ? (
+                                <img
+                                    src={logoBase64 || formData.logoUrl}
+                                    alt="Company Logo"
+                                    className="company-logo-img"
+                                    style={{ maxHeight: '80px', maxWidth: '150px', objectFit: 'contain' }}
+                                />
+                            ) : (
+                                <div className="logo-circle">
+                                    <span className="logo-text">{formData.sellerName.substring(0, 3).toUpperCase()}</span>
+                                </div>
+                            )}
+                            {!formData.logoUrl && <div className="company-name-logo">{formData.sellerName.toUpperCase()}</div>}
                         </div>
                         <div className="company-tagline">
                             {(formData.sellerTagline || 'AN EVENT MANAGEMENT COMPANY').toUpperCase()}

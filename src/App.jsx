@@ -128,7 +128,8 @@ function App() {
         sellerGST: company.gst_number,
         sellerPAN: company.pan_number || '',
         sellerEmail: company.email,
-        sellerTagline: company.tagline || ''
+        sellerTagline: company.tagline || '',
+        logoUrl: company.logo_url || ''
       }));
       setSelectedCompany(company);
     } else {
@@ -330,8 +331,10 @@ function App() {
       html2canvas: {
         scale: 2,
         useCORS: true,
+        allowTaint: true,
         letterRendering: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        logging: true
       },
       jsPDF: {
         unit: 'mm',
