@@ -1,0 +1,216 @@
+import { forwardRef } from 'react';
+
+const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInWords }, ref) => {
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(-2);
+        return `${day}.${month}.${year}`;
+    };
+
+    const sellerPAN = formData.sellerPAN || (formData.sellerGST ? formData.sellerGST.substring(2, 12) : '');
+
+    return (
+        <div ref={ref} className="invoice-template" style={{ display: 'none' }}>
+            <div className="invoice-page">
+                {/* Header with Logo and Company Name */}
+                <div className="invoice-header">
+                    <div className="company-logo-section">
+                        <div className="company-logo">
+                            <div className="logo-circle">
+                                <span className="logo-text">{formData.sellerName.substring(0, 3).toUpperCase()}</span>
+                            </div>
+                            <div className="company-name-logo">{formData.sellerName.toUpperCase()}</div>
+                        </div>
+                        <div className="company-tagline">
+                            {(formData.sellerTagline || 'AN EVENT MANAGEMENT COMPANY').toUpperCase()}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tax Invoice Title */}
+                <div className="invoice-title-bar">
+                    <h1 className="invoice-title">TAX INVOICE</h1>
+                </div>
+
+                {/* Main Invoice Content */}
+                <div className="invoice-content">
+                    <table className="invoice-main-table">
+                        <tbody>
+                            <tr>
+                                {/* Left Column: Seller Details */}
+                                <td className="seller-column">
+                                    <div className="seller-info">
+                                        <div className="seller-name">{formData.sellerName}</div>
+                                        <div className="seller-address" dangerouslySetInnerHTML={{ __html: formData.sellerAddress.replace(/\n/g, '<br>') }} />
+                                        <div className="seller-contact">Tel # {formData.sellerPhone}</div>
+                                        <div className="seller-gst">GST No - {formData.sellerGST} PAN NO - {sellerPAN}</div>
+                                        <div className="seller-email">E-mail - {formData.sellerEmail}</div>
+                                        <div className="bill-to-label">Bill To : -</div>
+                                        <div className="buyer-name">{formData.buyerName}</div>
+                                        <div className="buyer-address" dangerouslySetInnerHTML={{ __html: formData.buyerAddress.replace(/\n/g, '<br>') }} />
+                                        <div className="buyer-gst">GST No – {formData.buyerGST || ''}</div>
+                                    </div>
+                                </td>
+
+                                {/* Right Column: Invoice Metadata */}
+                                <td className="metadata-column">
+                                    <table className="metadata-table">
+                                        <tbody>
+                                            <tr>
+                                                <td className="meta-label">Invoice No: -</td>
+                                                <td className="meta-value">{formData.invoiceNumber}</td>
+                                                <td className="meta-label">Dated: -</td>
+                                                <td className="meta-value">{formatDate(formData.invoiceDate)}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className="meta-label">Delivery Note: -</td>
+                                                <td className="meta-value">{formData.deliveryNote}</td>
+                                                <td className="meta-label" colSpan="2">
+                                                    Mode/Term of Payment:-<br />
+                                                    {formData.paymentMode || 'UPI'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="meta-label">Supplier Ref.:</td>
+                                                <td className="meta-value">{formData.supplierRef}</td>
+                                                <td className="meta-label">Other Reference</td>
+                                                <td className="meta-value">{formData.otherRef}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className="meta-label">Buyer's PO No:</td>
+                                                <td className="meta-value">{formData.buyerPO}</td>
+                                                <td className="meta-label">Dated: -</td>
+                                                <td className="meta-value">{formatDate(formData.poDate)}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className="meta-label">Site:</td>
+                                                <td className="meta-value"></td>
+                                                <td className="meta-label">Dated: -</td>
+                                                <td className="meta-value"></td>
+                                            </tr>
+                                            <tr>
+                                                <td className="meta-label">Dispatched Through: -</td>
+                                                <td className="meta-value">{formData.dispatchThrough || 'Self Pickup'}</td>
+                                                <td className="meta-label">Destination: -</td>
+                                                <td className="meta-value">{formData.destination}</td>
+                                            </tr>
+                                            <tr>
+                                                <td className="meta-label" colSpan="4">
+                                                    Terms of Delivery: -<br />
+                                                    {formData.termsOfDelivery}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Items Table */}
+                    <table className="items-table">
+                        <thead>
+                            <tr>
+                                <th className="col-srno">Sr No</th>
+                                <th className="col-description">Description</th>
+                                <th className="col-hsn">HSN<br />Code</th>
+                                <th className="col-unit">Unit</th>
+                                <th className="col-amount">Amount</th>
+                                <th className="col-gst-percent">GST %</th>
+                                <th className="col-gst-amt">GST<br />Amt</th>
+                                <th className="col-total">Total<br />Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {items.map((item, index) => {
+                                const amount = parseFloat(item.amount) || 0;
+                                const gstAmount = (amount * gstRate) / 100;
+                                const total = amount + gstAmount;
+
+                                return (
+                                    <tr key={item.id}>
+                                        <td className="col-srno">{index + 1}</td>
+                                        <td className="col-description" dangerouslySetInnerHTML={{ __html: item.description.replace(/\n/g, '<br>') }} />
+                                        <td className="col-hsn">{item.hsn}</td>
+                                        <td className="col-unit">{item.unit}</td>
+                                        <td className="col-amount">{amount.toFixed(2)}</td>
+                                        <td className="col-gst-percent">{gstRate}</td>
+                                        <td className="col-gst-amt">{gstAmount.toFixed(2)}</td>
+                                        <td className="col-total">{total.toFixed(2)}</td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                        <tfoot>
+                            <tr className="subtotal-row">
+                                <td colSpan="6"></td>
+                                <td className="subtotal-value">{totals.totalGST.toFixed(2)}</td>
+                                <td className="subtotal-value">{totals.totalAfterTax.toFixed(2)}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    {/* Amount in Words and Totals */}
+                    <table className="summary-table">
+                        <tbody>
+                            <tr>
+                                <td className="words-section" rowSpan="5">
+                                    <div className="words-label">Total Invoice Amount in Words:</div>
+                                    <div className="words-value">{amountInWords}</div>
+                                    <div className="reverse-charge">Under Reverse Charges: - NO</div>
+                                </td>
+                                <td className="summary-label">Total Amount<br />Before Tax:</td>
+                                <td className="summary-value">{totals.totalBeforeTax.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td className="summary-label">Add: IGST {gstRate}%</td>
+                                <td className="summary-value">{totals.totalGST.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td className="summary-label"></td>
+                                <td className="summary-value"></td>
+                            </tr>
+                            <tr>
+                                <td className="summary-label">Tax Amount:</td>
+                                <td className="summary-value">{totals.totalGST.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td className="summary-label summary-final">Total amount after tax</td>
+                                <td className="summary-value summary-final">{totals.totalAfterTax.toFixed(2)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Footer Section */}
+                    <div className="invoice-footer">
+                        <div className="footer-left">
+                            <div className="for-company">For {formData.sellerName}</div>
+                            <div className="signature-space"></div>
+                            <div className="auth-signatory">Declaration <strong>Authorized Signatory</strong></div>
+                            <div className="declaration-text">
+                                We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+                            </div>
+                        </div>
+                        <div className="footer-right">
+                            <div className="stamp-area">
+                                <div className="stamp-placeholder">For {formData.sellerName.toUpperCase()}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Registered Office */}
+                    <div className="registered-office">
+                        Regd. Office - {formData.sellerAddress.replace(/\n/g, ', ')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+InvoicePreview.displayName = 'InvoicePreview';
+
+export default InvoicePreview;

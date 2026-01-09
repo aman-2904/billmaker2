@@ -1,0 +1,427 @@
+﻿/* ===================================
+   INVOICE TEMPLATE STYLES
+   (Pixel-perfect match to reference)
+   =================================== */
+
+.invoice-template {
+    background: #ffffff;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.invoice-page {
+    width: 100%;
+    padding: 10mm;
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    color: #000000;
+    background: #ffffff;
+}
+
+/* Invoice Header */
+.invoice-header {
+    margin-bottom: 8px;
+}
+
+.company-logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.company-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #0033cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #0033cc;
+}
+
+.logo-text {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.company-name-logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0033cc;
+    letter-spacing: 2px;
+}
+
+.company-tagline {
+    font-size: 11px;
+    font-weight: bold;
+    text-align: right;
+    color: #000000;
+}
+
+/* Invoice Title */
+.invoice-title-bar {
+    border: 1px solid #000000;
+    border-bottom: none;
+    text-align: center;
+    padding: 4px 0;
+}
+
+.invoice-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Main Invoice Table */
+.invoice-main-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    margin-bottom: 0;
+}
+
+.seller-column {
+    width: 50%;
+    border-right: 1px solid #000000;
+    padding: 8px;
+    vertical-align: top;
+    font-size: 9pt;
+}
+
+.metadata-column {
+    width: 50%;
+    padding: 0;
+    vertical-align: top;
+}
+
+/* Seller Info */
+.seller-info {
+    line-height: 1.4;
+}
+
+.seller-name {
+    font-weight: bold;
+    font-size: 10pt;
+    margin-bottom: 2px;
+}
+
+.seller-address {
+    margin-bottom: 2px;
+}
+
+.seller-contact {
+    margin-bottom: 2px;
+}
+
+.seller-gst {
+    margin-bottom: 2px;
+}
+
+.seller-email {
+    margin-bottom: 8px;
+}
+
+.bill-to-label {
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+.buyer-name {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.buyer-address {
+    margin-bottom: 2px;
+}
+
+.buyer-gst {
+    margin-bottom: 2px;
+}
+
+/* Metadata Table */
+.metadata-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+}
+
+.metadata-table td {
+    border: 1px solid #000000;
+    padding: 4px 6px;
+    vertical-align: top;
+}
+
+.meta-label {
+    font-size: 8pt;
+    width: 25%;
+}
+
+.meta-value {
+    font-size: 8pt;
+    width: 25%;
+}
+
+/* Items Table */
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    border-top: none;
+    margin-bottom: 0;
+}
+
+.items-table th {
+    border: 1px solid #000000;
+    padding: 6px 4px;
+    font-size: 9pt;
+    font-weight: bold;
+    text-align: center;
+    background: #ffffff;
+}
+
+.items-table td {
+    border: 1px solid #000000;
+    padding: 6px 4px;
+    font-size: 9pt;
+}
+
+.col-srno {
+    width: 5%;
+    text-align: center;
+}
+
+.col-description {
+    width: 30%;
+    text-align: left;
+}
+
+.col-hsn {
+    width: 10%;
+    text-align: center;
+}
+
+.col-unit {
+    width: 8%;
+    text-align: center;
+}
+
+.col-amount {
+    width: 15%;
+    text-align: right;
+}
+
+.col-gst-percent {
+    width: 8%;
+    text-align: center;
+}
+
+.col-gst-amt {
+    width: 12%;
+    text-align: right;
+}
+
+.col-total {
+    width: 12%;
+    text-align: right;
+}
+
+.items-table tbody td {
+    vertical-align: top;
+}
+
+.items-table tbody .col-srno {
+    text-align: center;
+}
+
+.items-table tbody .col-description {
+    text-align: left;
+    font-size: 8.5pt;
+    line-height: 1.3;
+}
+
+.items-table tbody .col-hsn {
+    text-align: center;
+}
+
+.items-table tbody .col-unit {
+    text-align: center;
+}
+
+.items-table tbody .col-amount {
+    text-align: right;
+}
+
+.items-table tbody .col-gst-percent {
+    text-align: center;
+}
+
+.items-table tbody .col-gst-amt {
+    text-align: right;
+}
+
+.items-table tbody .col-total {
+    text-align: right;
+}
+
+.subtotal-row td {
+    border-top: 1px solid #000000;
+    font-weight: bold;
+    padding: 6px 4px;
+}
+
+.subtotal-value {
+    text-align: right;
+}
+
+/* Summary Table */
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    border-top: none;
+}
+
+.summary-table td {
+    border: 1px solid #000000;
+    padding: 6px 8px;
+    font-size: 9pt;
+}
+
+.words-section {
+    width: 50%;
+    vertical-align: top;
+    padding: 10px;
+}
+
+.words-label {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 9pt;
+}
+
+.words-value {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 9pt;
+}
+
+.reverse-charge {
+    font-size: 8.5pt;
+    margin-top: 8px;
+}
+
+.summary-label {
+    width: 25%;
+    text-align: left;
+    font-size: 9pt;
+}
+
+.summary-value {
+    width: 25%;
+    text-align: right;
+    font-size: 9pt;
+}
+
+.summary-final {
+    font-weight: bold;
+}
+
+/* Footer */
+.invoice-footer {
+    border: 1px solid #000000;
+    border-top: none;
+    display: flex;
+    min-height: 100px;
+}
+
+.footer-left {
+    width: 50%;
+    border-right: 1px solid #000000;
+    padding: 10px;
+}
+
+.footer-right {
+    width: 50%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.for-company {
+    font-size: 9pt;
+    margin-bottom: 40px;
+}
+
+.signature-space {
+    min-height: 40px;
+}
+
+.auth-signatory {
+    font-size: 9pt;
+    margin-bottom: 8px;
+}
+
+.declaration-text {
+    font-size: 8pt;
+    line-height: 1.3;
+}
+
+.stamp-area {
+    text-align: center;
+}
+
+.stamp-placeholder {
+    font-size: 9pt;
+    font-style: italic;
+    color: #666666;
+}
+
+/* Registered Office */
+.registered-office {
+    border: 1px solid #000000;
+    border-top: none;
+    padding: 6px 8px;
+    font-size: 8pt;
+    text-align: center;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: #ffffff;
+        padding: 0;
+    }
+    
+    .container,
+    .invoice-form,
+    .app-header,
+    .form-actions {
+        display: none !important;
+    }
+    
+    .invoice-template {
+        display: block !important;
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .invoice-page {
+        page-break-after: always;
+    }
+}

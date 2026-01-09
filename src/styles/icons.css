@@ -1,0 +1,76 @@
+/* ===================================
+   ICON SYSTEM STYLES
+   =================================== */
+
+/* Icon button alignment */
+button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+button svg {
+    flex-shrink: 0;
+    vertical-align: middle;
+}
+
+/* Icon hover transitions */
+.btn-primary svg,
+.btn-secondary svg,
+.btn-success svg,
+.btn-add svg,
+.btn-edit svg,
+.btn-delete svg,
+.btn-action svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-primary:hover svg,
+.btn-success:hover svg,
+.btn-add:hover svg {
+    transform: scale(1.1);
+}
+
+.btn-edit:hover svg {
+    transform: rotate(-5deg) scale(1.1);
+}
+
+.btn-delete:hover svg,
+.btn-action.btn-delete:hover svg {
+    transform: scale(1.15);
+}
+
+/* Spinning animation for loading icons */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+/* Icon color inheritance */
+button svg {
+    color: inherit;
+}
+
+/* Quick add header icon spacing */
+.quick-add-header h3 {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Section header icon spacing */
+.section-header h2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
