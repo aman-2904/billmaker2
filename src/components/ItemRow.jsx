@@ -1,7 +1,8 @@
 import { calculateGST } from '../utils/gstCalculation';
 
 function ItemRow({ item, index, gstRate, onChange, onRemove }) {
-    const { gstAmount, totalAmount } = calculateGST(parseFloat(item.amount) || 0, gstRate);
+    const effectiveRate = item.excludeGST ? 0 : gstRate;
+    const { gstAmount, totalAmount } = calculateGST(parseFloat(item.amount) || 0, effectiveRate);
 
     return (
         <div className="item-row">
@@ -42,16 +43,37 @@ function ItemRow({ item, index, gstRate, onChange, onRemove }) {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Amount *</label>
+                    <label>Price/Rate *</label>
                     <input
                         type="number"
                         placeholder="0.00"
                         min="0"
                         step="0.01"
-                        value={item.amount}
-                        onChange={(e) => onChange(item.id, 'amount', e.target.value)}
+                        value={item.rate}
+                        onChange={(e) => onChange(item.id, 'rate', e.target.value)}
                         required
                     />
+                </div>
+                <div className="form-group">
+                    <label>Amount (Taxable)</label>
+                    <input
+                        type="number"
+                        placeholder="0.00"
+                        value={item.amount}
+                        readOnly
+                        className="readonly-input"
+                    />
+                </div>
+                <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', marginTop: '25px' }}>
+                    <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <input
+                            type="checkbox"
+                            checked={item.excludeGST || false}
+                            onChange={(e) => onChange(item.id, 'excludeGST', e.target.checked)}
+                            style={{ width: 'auto', margin: 0 }}
+                        />
+                        <span style={{ fontSize: '0.9em' }}>Exclude GST</span>
+                    </label>
                 </div>
             </div>
             <div className="item-totals">

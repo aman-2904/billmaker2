@@ -40,7 +40,7 @@ function App() {
   });
 
   const [items, setItems] = useState([
-    { id: 1, description: '', hsn: '', unit: 1, amount: 0 }
+    { id: 1, description: '', hsn: '', unit: 1, rate: 0, amount: 0, excludeGST: false }
   ]);
 
   const [gstRate, setGstRate] = useState(18);
@@ -59,14 +59,24 @@ function App() {
   };
 
   const handleItemChange = (id, field, value) => {
-    setItems(prev => prev.map(item =>
-      item.id === id ? { ...item, [field]: value } : item
-    ));
+    setItems(prev => prev.map(item => {
+      if (item.id !== id) return item;
+
+      const updates = { [field]: value };
+
+      if (field === 'unit' || field === 'rate') {
+        const unit = field === 'unit' ? parseFloat(value) || 0 : parseFloat(item.unit) || 0;
+        const rate = field === 'rate' ? parseFloat(value) || 0 : parseFloat(item.rate) || 0;
+        updates.amount = parseFloat((unit * rate).toFixed(2));
+      }
+
+      return { ...item, ...updates };
+    }));
   };
 
   const addItem = () => {
     const newId = Math.max(...items.map(i => i.id), 0) + 1;
-    setItems(prev => [...prev, { id: newId, description: '', hsn: '', unit: 1, amount: 0 }]);
+    setItems(prev => [...prev, { id: newId, description: '', hsn: '', unit: 1, rate: 0, amount: 0, excludeGST: false }]);
   };
 
   const removeItem = (id) => {
@@ -201,7 +211,11 @@ function App() {
       destination: quotation.invoice_details?.destination || '',
       termsOfDelivery: quotation.invoice_details?.termsOfDelivery || ''
     }));
-    setItems(quotation.items || [{ id: 1, description: '', hsn: '', unit: 1, amount: 0 }]);
+    setItems((quotation.items || []).map(item => ({
+      ...item,
+      rate: item.rate || (item.unit ? item.amount / item.unit : 0),
+      excludeGST: item.excludeGST || false
+    })) || [{ id: 1, description: '', hsn: '', unit: 1, rate: 0, amount: 0, excludeGST: false }]);
     setGstRate(quotation.gst_rate || 18);
     setCurrentQuotationId(quotation.id);
   };
@@ -359,6 +373,13 @@ function App() {
           selectedCompanyId={selectedCompany?.id}
         />
 
+        {/* Buyer Selector */}
+        <BuyerSelector
+          onBuyerSelect={handleBuyerSelect}
+          onManageClick={() => setShowBuyerManager(true)}
+          selectedBuyerId={selectedBuyer?.id}
+        />
+
         {/* Main Invoice Form */}
         <InvoiceForm
           formData={formData}
@@ -410,12 +431,7 @@ function App() {
         }}
       />
 
-      {/* Buyer Selector */}
-      <BuyerSelector
-        onBuyerSelect={handleBuyerSelect}
-        onManageClick={() => setShowBuyerManager(true)}
-        selectedBuyerId={selectedBuyer?.id}
-      />
+
 
       {/* Buyer Manager Modal */}
       <BuyerManager

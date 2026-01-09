@@ -118,6 +118,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInW
                                 <th className="col-description">Description</th>
                                 <th className="col-hsn">HSN<br />Code</th>
                                 <th className="col-unit">Unit</th>
+                                <th className="col-rate">Rate</th>
                                 <th className="col-amount">Amount</th>
                                 <th className="col-gst-percent">GST %</th>
                                 <th className="col-gst-amt">GST<br />Amt</th>
@@ -127,7 +128,14 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInW
                         <tbody>
                             {items.map((item, index) => {
                                 const amount = parseFloat(item.amount) || 0;
-                                const gstAmount = (amount * gstRate) / 100;
+                                let gstAmount = 0;
+                                let effectiveGstRate = 0;
+
+                                if (!item.excludeGST) {
+                                    gstAmount = (amount * gstRate) / 100;
+                                    effectiveGstRate = gstRate;
+                                }
+
                                 const total = amount + gstAmount;
 
                                 return (
@@ -136,8 +144,9 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, totals, amountInW
                                         <td className="col-description" dangerouslySetInnerHTML={{ __html: item.description.replace(/\n/g, '<br>') }} />
                                         <td className="col-hsn">{item.hsn}</td>
                                         <td className="col-unit">{item.unit}</td>
+                                        <td className="col-rate">{item.rate ? parseFloat(item.rate).toFixed(2) : '0.00'}</td>
                                         <td className="col-amount">{amount.toFixed(2)}</td>
-                                        <td className="col-gst-percent">{gstRate}</td>
+                                        <td className="col-gst-percent">{item.excludeGST ? 'Exempt' : effectiveGstRate}</td>
                                         <td className="col-gst-amt">{gstAmount.toFixed(2)}</td>
                                         <td className="col-total">{total.toFixed(2)}</td>
                                     </tr>

@@ -13,7 +13,13 @@ export function calculateInvoiceTotals(items, gstRate) {
 
     items.forEach(item => {
         const amount = parseFloat(item.amount) || 0;
-        const { gstAmount } = calculateGST(amount, gstRate);
+
+        // Skip GST calculation if excludeGST is true
+        let gstAmount = 0;
+        if (!item.excludeGST) {
+            const result = calculateGST(amount, gstRate);
+            gstAmount = result.gstAmount;
+        }
 
         totalBeforeTax += amount;
         totalGST += gstAmount;
