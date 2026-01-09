@@ -333,7 +333,7 @@ function App() {
     const filename = `Invoice_${cleanInvoiceNumber}.pdf`;
 
     const opt = {
-      margin: [5, 5, 5, 5],
+      margin: 0,
       filename: filename,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: {
