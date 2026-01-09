@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import html2pdf from 'html2pdf.js';
 import InvoiceForm from './components/InvoiceForm';
 import InvoicePreview from './components/InvoicePreview';
@@ -10,11 +10,28 @@ import QuotationList from './components/QuotationList';
 import { calculateInvoiceTotals } from './utils/gstCalculation';
 import { numberToWords } from './utils/numberToWords';
 import { saveQuotation, updateQuotation, generateQuotationNumber } from './services/quotationService';
+import Login from './components/Login';
 import './styles/form.css';
 import './styles/invoice.css';
 import './styles/icons.css';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    setIsAuthenticated(isLoggedIn);
+  }, []);
+
+  const handleLogin = () => {
+    localStorage.setItem('isLoggedIn', 'true');
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    setIsAuthenticated(false);
+  };
   const [formData, setFormData] = useState({
     sellerName: '',
     sellerAddress: '',
@@ -369,11 +386,33 @@ function App() {
   const totals = calculateInvoiceTotals(items, gstRate, gstType);
   const amountInWords = numberToWords(totals.totalAfterTax);
 
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   return (
     <div className="container">
       <header className="app-header">
         <h1>GST Tax Invoice Maker</h1>
         <p className="subtitle">Professional invoice generator with instant PDF download</p>
+        <button
+          onClick={handleLogout}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            padding: '8px 16px',
+            background: 'rgba(255, 59, 48, 0.1)',
+            color: '#ff3b30',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          Logout
+        </button>
       </header>
 
       <div className="invoice-form">
