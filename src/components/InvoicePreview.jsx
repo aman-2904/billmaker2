@@ -257,7 +257,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                             ) : (
                                 <>
                                     <tr>
-                                        <td className="summary-label">Add: IGST {gstRate}%</td>
+                                        <td className="summary-label">GST 0%</td>
                                         <td className="summary-value">0.00</td>
                                     </tr>
                                     <tr>

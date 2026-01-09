@@ -320,8 +320,8 @@ function InvoiceForm({
                                 type="radio"
                                 name="gstType"
                                 value=""
-                                checked={!gstType}
-                                onChange={(e) => onGstTypeChange('')}
+                                checked={gstType === ''}
+                                onChange={() => onGstTypeChange('')}
                                 style={{ marginRight: '8px' }}
                             />
                             None
@@ -368,7 +368,7 @@ function InvoiceForm({
                     <Icons.FileDown size={ICON_SIZES.md} /> Save & Generate PDF
                 </button>
             </div>
-        </form>
+        </form >
     );
 }
 
