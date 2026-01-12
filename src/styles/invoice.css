@@ -91,6 +91,11 @@
     margin-bottom: 0;
 }
 
+tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
 .seller-column {
     width: 50%;
     border-right: 1px solid #000000;
@@ -405,14 +410,14 @@
         background: #ffffff;
         padding: 0;
     }
-    
+
     .container,
     .invoice-form,
     .app-header,
     .form-actions {
         display: none !important;
     }
-    
+
     .invoice-template {
         display: block !important;
         width: 210mm;
@@ -420,7 +425,7 @@
         margin: 0;
         padding: 0;
     }
-    
+
     .invoice-page {
         page-break-after: always;
     }

@@ -365,7 +365,8 @@ function App() {
         unit: 'mm',
         format: 'a4',
         orientation: 'portrait'
-      }
+      },
+      pagebreak: { mode: 'css', avoid: 'tr' }
     };
 
     html2pdf()
