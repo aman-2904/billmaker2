@@ -154,7 +154,7 @@ function InvoiceForm({
                             id="invoiceNumber"
                             value={formData.invoiceNumber}
                             onChange={(e) => onFormChange('invoiceNumber', e.target.value)}
-                            placeholder="NNS - 305"
+                            placeholder="Enter your invoice number"
                             required
                         />
                     </div>
@@ -175,7 +175,7 @@ function InvoiceForm({
                             id="deliveryNote"
                             value={formData.deliveryNote}
                             onChange={(e) => onFormChange('deliveryNote', e.target.value)}
-                            placeholder="NNS - 305"
+                            placeholder="write the note"
                         />
                     </div>
                     <div className="form-group">
@@ -185,7 +185,7 @@ function InvoiceForm({
                             id="paymentMode"
                             value={formData.paymentMode}
                             onChange={(e) => onFormChange('paymentMode', e.target.value)}
-                            placeholder="UPI"
+                            placeholder="UPI/Cash/Online"
                         />
                     </div>
                     <div className="form-group">

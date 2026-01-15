@@ -393,8 +393,8 @@ function App() {
   return (
     <div className="container">
       <header className="app-header">
-        <h1>GST Tax Invoice Maker</h1>
-        <p className="subtitle">Professional invoice generator with instant PDF download</p>
+        <h1>Invoice Maker</h1>
+
         <button
           onClick={handleLogout}
           className="logout-button"
