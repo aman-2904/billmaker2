@@ -232,7 +232,6 @@ function App() {
       poDate: quotation.invoice_details?.poDate || '',
       dispatchThrough: quotation.invoice_details?.dispatchThrough || '',
       destination: quotation.invoice_details?.destination || '',
-      destination: quotation.invoice_details?.destination || '',
       termsOfDelivery: quotation.invoice_details?.termsOfDelivery || ''
     }));
     setGstType(quotation.invoice_details?.gstType || '');
@@ -398,19 +397,7 @@ function App() {
         <p className="subtitle">Professional invoice generator with instant PDF download</p>
         <button
           onClick={handleLogout}
-          style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-            padding: '8px 16px',
-            background: 'rgba(255, 59, 48, 0.1)',
-            color: '#ff3b30',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: '500'
-          }}
+          className="logout-button"
         >
           Logout
         </button>

@@ -47,6 +47,93 @@ body {
     opacity: 0.9;
 }
 
+.logout-button {
+    position: absolute;
+    top: 35px;
+    right: 35px;
+    padding: 8px 16px;
+    background: rgba(255, 59, 48, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+    background: rgba(255, 59, 48, 0.2);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .logout-button {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 16px;
+        display: inline-block;
+        width: auto;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .item-fields {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .item-row {
+        padding: 16px;
+    }
+
+    .item-totals {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-success {
+        width: 100%;
+        padding: 14px;
+    }
+
+    .app-header {
+        padding: 20px;
+    }
+
+    .app-header h1 {
+        font-size: 24px;
+    }
+
+    .invoice-form {
+        padding: 16px;
+    }
+
+    .container {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    body {
+        padding: 0;
+    }
+
+    .totals-section {
+        padding: 16px;
+    }
+}
+
 /* Form */
 .invoice-form {
     padding: 40px;

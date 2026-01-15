@@ -254,8 +254,6 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                 sellerName: '',
                 sellerAddress: '',
                 sellerPhone: '',
-                sellerGST: '',
-                sellerPAN: '',
                 sellerEmail: '',
                 sellerTagline: '',
                 signatureUrl: ''
@@ -653,8 +651,6 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                             sellerAddress: '',
                                             sellerPhone: '',
                                             sellerGST: '',
-                                            sellerPAN: '',
-                                            sellerEmail: '',
                                             sellerPAN: '',
                                             sellerEmail: '',
                                             sellerTagline: '',
