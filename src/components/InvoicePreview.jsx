@@ -214,6 +214,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                         <tfoot>
                             <tr className="subtotal-row">
                                 <td colSpan="6"></td>
+                                <td></td> {/* GST % column - Blank */}
                                 <td className="subtotal-value">{totals.totalGST.toFixed(2)}</td>
                                 <td className="subtotal-value">{totals.totalAfterTax.toFixed(2)}</td>
                             </tr>
