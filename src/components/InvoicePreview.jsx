@@ -103,7 +103,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                                     <div className="seller-info">
                                         <div className="seller-name">{formData.sellerName}</div>
                                         <div className="seller-address" dangerouslySetInnerHTML={{ __html: formData.sellerAddress.replace(/\n/g, '<br>') }} />
-                                        <div className="seller-contact">Tel # {formData.sellerPhone}</div>
+                                        <div className="seller-contact">Tel - {formData.sellerPhone}</div>
                                         <div className="seller-gst">GST No - {formData.sellerGST} PAN NO - {sellerPAN}</div>
                                         <div className="seller-email">E-mail - {formData.sellerEmail}</div>
                                         <div className="bill-to-label">Bill To : -</div>
