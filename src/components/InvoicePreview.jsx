@@ -128,7 +128,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                                                 <td className="meta-value">{formData.deliveryNote}</td>
                                                 <td className="meta-label" colSpan="2">
                                                     Mode/Term of Payment:-<br />
-                                                    {formData.paymentMode || 'UPI'}
+                                                    {formData.paymentMode}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -151,7 +151,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                                             </tr>
                                             <tr>
                                                 <td className="meta-label">Dispatched Through: -</td>
-                                                <td className="meta-value">{formData.dispatchThrough || 'Self Pickup'}</td>
+                                                <td className="meta-value">{formData.dispatchThrough}</td>
                                                 <td className="meta-label">Destination: -</td>
                                                 <td className="meta-value">{formData.destination}</td>
                                             </tr>
