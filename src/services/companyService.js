@@ -123,11 +123,11 @@ export async function saveCompany(companyData) {
             .insert([{
                 company_name: companyData.sellerName,
                 address: companyData.sellerAddress,
+                regd_office_address: companyData.regdOfficeAddress || null,
                 phone: companyData.sellerPhone,
                 gst_number: companyData.sellerGST,
                 pan_number: companyData.sellerPAN || null,
                 email: companyData.sellerEmail,
-                tagline: companyData.sellerTagline || null,
                 tagline: companyData.sellerTagline || null,
                 logo_url: companyData.logoUrl || null,
                 signature_url: companyData.signatureUrl || null
@@ -166,11 +166,11 @@ export async function updateCompany(id, companyData) {
             .update({
                 company_name: companyData.sellerName,
                 address: companyData.sellerAddress,
+                regd_office_address: companyData.regdOfficeAddress || null,
                 phone: companyData.sellerPhone,
                 gst_number: companyData.sellerGST,
                 pan_number: companyData.sellerPAN || null,
                 email: companyData.sellerEmail,
-                tagline: companyData.sellerTagline || null,
                 tagline: companyData.sellerTagline || null,
                 logo_url: companyData.logoUrl || null,
                 signature_url: companyData.signatureUrl || null

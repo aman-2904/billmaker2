@@ -306,7 +306,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
 
                     {/* Registered Office */}
                     <div className="registered-office">
-                        Regd. Office - {formData.sellerAddress.replace(/\n/g, ', ')}
+                        Regd. Office - {(formData.regdOfficeAddress || '').replace(/\n/g, ', ')}
                     </div>
                 </div>
             </div>

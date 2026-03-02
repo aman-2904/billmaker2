@@ -48,6 +48,16 @@ function InvoiceForm({
                             required
                         />
                     </div>
+                    <div className="form-group full-width">
+                        <label htmlFor="regdOfficeAddress">Regd. Office Address</label>
+                        <textarea
+                            id="regdOfficeAddress"
+                            rows="2"
+                            value={formData.regdOfficeAddress}
+                            onChange={(e) => onFormChange('regdOfficeAddress', e.target.value)}
+                            placeholder="Enter registered office address (printed at bottom of invoice)"
+                        />
+                    </div>
                     <div className="form-group">
                         <label htmlFor="sellerPhone">Phone Number *</label>
                         <input

@@ -15,6 +15,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         email: '',
         panNumber: '',
         address: '',
+        regdOfficeAddress: '',
         tagline: '',
         logoUrl: '',
         signatureUrl: ''
@@ -23,6 +24,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
     const [formData, setFormData] = useState({
         sellerName: '',
         sellerAddress: '',
+        regdOfficeAddress: '',
         sellerPhone: '',
         sellerGST: '',
         sellerEmail: '',
@@ -63,6 +65,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         setFormData({
             sellerName: company.company_name,
             sellerAddress: company.address,
+            regdOfficeAddress: company.regd_office_address || '',
             sellerPhone: company.phone,
             sellerGST: company.gst_number,
             sellerEmail: company.email,
@@ -82,6 +85,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
             email: '',
             panNumber: '',
             address: '',
+            regdOfficeAddress: '',
             tagline: ''
         });
         setError(null);
@@ -182,6 +186,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                 sellerEmail: newCompanyData.email.trim().toLowerCase(),
                 sellerPAN: newCompanyData.panNumber.trim() || '',
                 sellerAddress: newCompanyData.address.trim() || '',
+                regdOfficeAddress: newCompanyData.regdOfficeAddress.trim() || '',
                 sellerTagline: newCompanyData.tagline.trim() || '',
                 logoUrl: newCompanyData.logoUrl || '',
                 signatureUrl: newCompanyData.signatureUrl || ''
@@ -202,6 +207,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                 email: '',
                 panNumber: '',
                 address: '',
+                regdOfficeAddress: '',
                 tagline: '',
                 signatureUrl: ''
             });
@@ -230,6 +236,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
             email: '',
             panNumber: '',
             address: '',
+            regdOfficeAddress: '',
             tagline: ''
         });
         setError(null);
@@ -253,6 +260,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
             setFormData({
                 sellerName: '',
                 sellerAddress: '',
+                regdOfficeAddress: '',
                 sellerPhone: '',
                 sellerEmail: '',
                 sellerTagline: '',
@@ -431,6 +439,17 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                 </div>
 
                                 <div className="form-group full-width">
+                                    <label>Regd. Office Address</label>
+                                    <textarea
+                                        rows="2"
+                                        value={newCompanyData.regdOfficeAddress}
+                                        onChange={(e) => setNewCompanyData({ ...newCompanyData, regdOfficeAddress: e.target.value })}
+                                        placeholder="Enter registered office address (printed at bottom of invoice)"
+                                        disabled={loading}
+                                    />
+                                </div>
+
+                                <div className="form-group full-width">
                                     <label>Company Tagline</label>
                                     <input
                                         type="text"
@@ -538,6 +557,16 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                         value={formData.sellerAddress}
                                         onChange={(e) => setFormData({ ...formData, sellerAddress: e.target.value })}
                                         required
+                                    />
+                                </div>
+
+                                <div className="form-group full-width">
+                                    <label>Regd. Office Address</label>
+                                    <textarea
+                                        rows="2"
+                                        value={formData.regdOfficeAddress}
+                                        onChange={(e) => setFormData({ ...formData, regdOfficeAddress: e.target.value })}
+                                        placeholder="Enter registered office address (printed at bottom of invoice)"
                                     />
                                 </div>
 
@@ -649,6 +678,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                         setFormData({
                                             sellerName: '',
                                             sellerAddress: '',
+                                            regdOfficeAddress: '',
                                             sellerPhone: '',
                                             sellerGST: '',
                                             sellerPAN: '',

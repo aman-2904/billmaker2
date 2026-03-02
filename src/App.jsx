@@ -35,6 +35,7 @@ function App() {
   const [formData, setFormData] = useState({
     sellerName: '',
     sellerAddress: '',
+    regdOfficeAddress: '',
     sellerPhone: '',
     sellerGST: '',
     sellerPAN: '',
@@ -109,6 +110,7 @@ function App() {
       setFormData({
         sellerName: '',
         sellerAddress: '',
+        regdOfficeAddress: '',
         sellerPhone: '',
         sellerGST: '',
         sellerPAN: '',
@@ -144,6 +146,7 @@ function App() {
         ...prev,
         sellerName: company.company_name,
         sellerAddress: company.address,
+        regdOfficeAddress: company.regd_office_address || '',
         sellerPhone: company.phone,
         sellerGST: company.gst_number,
         sellerPAN: company.pan_number || '',
