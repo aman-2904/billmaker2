@@ -64,6 +64,7 @@ function App() {
 
   const [gstRate, setGstRate] = useState(18);
   const [gstType, setGstType] = useState('');
+  const [vatRate, setVatRate] = useState(5);
   const invoiceRef = useRef(null);
 
   // Supabase integration state
@@ -386,7 +387,7 @@ function App() {
       });
   };
 
-  const totals = calculateInvoiceTotals(items, gstRate, gstType);
+  const totals = calculateInvoiceTotals(items, gstRate, gstType, vatRate);
   const amountInWords = numberToWords(totals.totalAfterTax);
 
   if (!isAuthenticated) {
@@ -427,6 +428,7 @@ function App() {
           items={items}
           gstRate={gstRate}
           gstType={gstType}
+          vatRate={vatRate}
           totals={totals}
           amountInWords={amountInWords}
           onFormChange={handleFormChange}
@@ -434,6 +436,7 @@ function App() {
           onAddItem={addItem}
           onRemoveItem={removeItem}
           onGstRateChange={setGstRate}
+          onVatRateChange={setVatRate}
           onGeneratePDF={handleGenerateInvoicePDF}
           onReset={resetForm}
           onSaveQuotation={handleSaveQuotation}
@@ -450,6 +453,7 @@ function App() {
         items={items}
         gstRate={gstRate}
         gstType={gstType}
+        vatRate={vatRate}
         totals={totals}
         amountInWords={amountInWords}
       />

@@ -14,6 +14,8 @@ function InvoiceForm({
     onGstRateChange,
     gstType,
     onGstTypeChange,
+    vatRate,
+    onVatRateChange,
     onGeneratePDF,
     onReset,
     onSaveQuotation,
@@ -281,27 +283,48 @@ function InvoiceForm({
                             item={item}
                             index={index}
                             gstRate={gstRate}
+                            gstType={gstType}
+                            vatRate={vatRate}
                             onChange={onItemChange}
                             onRemove={onRemoveItem}
                         />
                     ))}
                 </div>
 
-                <div className="form-group" style={{ maxWidth: '200px', marginTop: '20px' }}>
-                    <label htmlFor="gstRate">GST Rate (%)</label>
-                    <input
-                        type="number"
-                        id="gstRate"
-                        value={gstRate}
-                        onChange={(e) => onGstRateChange(parseFloat(e.target.value) || 0)}
-                        min="0"
-                        max="100"
-                        step="0.01"
-                    />
-                </div>
+                {/* GST Rate - show only when not VAT and not None */}
+                {gstType !== 'VAT' && (
+                    <div className="form-group" style={{ maxWidth: '200px', marginTop: '20px' }}>
+                        <label htmlFor="gstRate">GST Rate (%)</label>
+                        <input
+                            type="number"
+                            id="gstRate"
+                            value={gstRate}
+                            onChange={(e) => onGstRateChange(parseFloat(e.target.value) || 0)}
+                            min="0"
+                            max="100"
+                            step="0.01"
+                        />
+                    </div>
+                )}
+
+                {/* VAT Rate - show only when VAT is selected */}
+                {gstType === 'VAT' && (
+                    <div className="form-group" style={{ maxWidth: '200px', marginTop: '20px' }}>
+                        <label htmlFor="vatRate">VAT Rate (%)</label>
+                        <input
+                            type="number"
+                            id="vatRate"
+                            value={vatRate}
+                            onChange={(e) => onVatRateChange(parseFloat(e.target.value) || 0)}
+                            min="0"
+                            max="100"
+                            step="0.01"
+                        />
+                    </div>
+                )}
 
                 <div className="form-group" style={{ marginTop: '20px' }}>
-                    <label>GST Type</label>
+                    <label>Tax Type</label>
                     <div className="gst-type-options">
                         <label className="gst-option">
                             <input
@@ -327,6 +350,16 @@ function InvoiceForm({
                             <input
                                 type="radio"
                                 name="gstType"
+                                value="VAT"
+                                checked={gstType === 'VAT'}
+                                onChange={(e) => onGstTypeChange(e.target.value)}
+                            />
+                            VAT
+                        </label>
+                        <label className="gst-option">
+                            <input
+                                type="radio"
+                                name="gstType"
                                 value=""
                                 checked={gstType === ''}
                                 onChange={() => onGstTypeChange('')}
@@ -346,7 +379,15 @@ function InvoiceForm({
                         <span className="total-value">₹{totals.totalBeforeTax.toFixed(2)}</span>
                     </div>
                     <div className="total-row">
-                        <span>GST Amount:</span>
+                        <span>
+                            {gstType === 'CGST_SGST'
+                                ? `CGST (${gstRate / 2}%) + SGST (${gstRate / 2}%):`
+                                : gstType === 'IGST'
+                                    ? `IGST (${gstRate}%):`
+                                    : gstType === 'VAT'
+                                        ? `VAT (${vatRate}%):`
+                                        : 'Tax Amount:'}
+                        </span>
                         <span className="total-value">₹{totals.totalGST.toFixed(2)}</span>
                     </div>
                     <div className="total-row total-final">

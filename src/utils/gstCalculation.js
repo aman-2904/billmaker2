@@ -7,28 +7,34 @@ export function calculateGST(amount, gstRate) {
     };
 }
 
-export function calculateInvoiceTotals(items, gstRate, gstType) {
+export function calculateInvoiceTotals(items, gstRate, gstType, vatRate = 0) {
     let totalBeforeTax = 0;
     let totalGST = 0;
     let totalCGST = 0;
     let totalSGST = 0;
     let totalIGST = 0;
+    let totalVAT = 0;
 
     items.forEach(item => {
         const amount = parseFloat(item.amount) || 0;
 
-        // Skip GST calculation if excludeGST is true or no gstType selected
         let gstAmount = 0;
         if (!item.excludeGST && gstType) {
-            const result = calculateGST(amount, gstRate);
-            gstAmount = result.gstAmount;
+            if (gstType === 'VAT') {
+                const result = calculateGST(amount, vatRate);
+                gstAmount = result.gstAmount;
+                totalVAT += gstAmount;
+            } else {
+                const result = calculateGST(amount, gstRate);
+                gstAmount = result.gstAmount;
 
-            if (gstType === 'CGST_SGST') {
-                const halfTax = gstAmount / 2;
-                totalCGST += halfTax;
-                totalSGST += halfTax;
-            } else if (gstType === 'IGST') {
-                totalIGST += gstAmount;
+                if (gstType === 'CGST_SGST') {
+                    const halfTax = gstAmount / 2;
+                    totalCGST += halfTax;
+                    totalSGST += halfTax;
+                } else if (gstType === 'IGST') {
+                    totalIGST += gstAmount;
+                }
             }
         }
 
@@ -44,6 +50,7 @@ export function calculateInvoiceTotals(items, gstRate, gstType) {
         totalCGST: parseFloat(totalCGST.toFixed(2)),
         totalSGST: parseFloat(totalSGST.toFixed(2)),
         totalIGST: parseFloat(totalIGST.toFixed(2)),
+        totalVAT: parseFloat(totalVAT.toFixed(2)),
         totalAfterTax: parseFloat(totalAfterTax.toFixed(2))
     };
 }

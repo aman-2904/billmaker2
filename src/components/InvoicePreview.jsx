@@ -1,6 +1,6 @@
 import { forwardRef, useState, useEffect } from 'react';
 
-const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, amountInWords }, ref) => {
+const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, vatRate, totals, amountInWords }, ref) => {
     const [logoBase64, setLogoBase64] = useState('');
     const [signatureBase64, setSignatureBase64] = useState('');
 
@@ -179,23 +179,25 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                                 <th className="col-unit">Unit</th>
                                 <th className="col-rate">Rate</th>
                                 <th className="col-amount">Amount</th>
-                                <th className="col-gst-percent">GST %</th>
-                                <th className="col-gst-amt">GST<br />Amt</th>
+                                <th className="col-gst-percent">{gstType === 'VAT' ? 'VAT %' : 'GST %'}</th>
+                                <th className="col-gst-amt">{gstType === 'VAT' ? 'VAT' : 'GST'}<br />Amt</th>
                                 <th className="col-total">Total<br />Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {items.map((item, index) => {
                                 const amount = parseFloat(item.amount) || 0;
-                                let gstAmount = 0;
-                                let effectiveGstRate = 0;
+                                let taxAmount = 0;
+                                let effectiveTaxRate = 0;
 
                                 if (!item.excludeGST) {
-                                    gstAmount = (amount * gstRate) / 100;
-                                    effectiveGstRate = gstRate;
+                                    // Use vatRate when VAT selected, gstRate otherwise
+                                    const activeRate = gstType === 'VAT' ? (vatRate || 0) : gstRate;
+                                    taxAmount = (amount * activeRate) / 100;
+                                    effectiveTaxRate = activeRate;
                                 }
 
-                                const total = amount + gstAmount;
+                                const total = amount + taxAmount;
 
                                 return (
                                     <tr key={item.id}>
@@ -205,8 +207,8 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                                         <td className="col-unit">{item.unit}</td>
                                         <td className="col-rate">{item.rate ? parseFloat(item.rate).toFixed(2) : '0.00'}</td>
                                         <td className="col-amount">{amount.toFixed(2)}</td>
-                                        <td className="col-gst-percent">{item.excludeGST ? 'Exempt' : effectiveGstRate}</td>
-                                        <td className="col-gst-amt">{gstAmount.toFixed(2)}</td>
+                                        <td className="col-gst-percent">{item.excludeGST ? 'Exempt' : effectiveTaxRate}</td>
+                                        <td className="col-gst-amt">{taxAmount.toFixed(2)}</td>
                                         <td className="col-total">{total.toFixed(2)}</td>
                                     </tr>
                                 );
@@ -215,7 +217,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                         <tfoot>
                             <tr className="subtotal-row">
                                 <td colSpan="6"></td>
-                                <td></td> {/* GST % column - Blank */}
+                                <td></td>
                                 <td className="subtotal-value">{totals.totalGST.toFixed(2)}</td>
                                 <td className="subtotal-value">{totals.totalAfterTax.toFixed(2)}</td>
                             </tr>
@@ -250,6 +252,17 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, totals, 
                                     <tr>
                                         <td className="summary-label">Add: IGST {gstRate}%</td>
                                         <td className="summary-value">{totals.totalIGST ? totals.totalIGST.toFixed(2) : '0.00'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="summary-label"></td>
+                                        <td className="summary-value"></td>
+                                    </tr>
+                                </>
+                            ) : gstType === 'VAT' ? (
+                                <>
+                                    <tr>
+                                        <td className="summary-label">Add: VAT {vatRate}%</td>
+                                        <td className="summary-value">{totals.totalVAT ? totals.totalVAT.toFixed(2) : '0.00'}</td>
                                     </tr>
                                     <tr>
                                         <td className="summary-label"></td>

@@ -1,8 +1,17 @@
 import { calculateGST } from '../utils/gstCalculation';
 
-function ItemRow({ item, index, gstRate, onChange, onRemove }) {
-    const effectiveRate = item.excludeGST ? 0 : gstRate;
+function ItemRow({ item, index, gstRate, gstType, vatRate, onChange, onRemove }) {
+    // Use VAT rate when VAT is selected, otherwise use GST rate
+    const activeRate = gstType === 'VAT' ? (vatRate || 0) : gstRate;
+    const effectiveRate = item.excludeGST ? 0 : activeRate;
     const { gstAmount, totalAmount } = calculateGST(parseFloat(item.amount) || 0, effectiveRate);
+
+    // Dynamic tax label
+    const taxLabel = item.excludeGST
+        ? 'Tax Amount (Exempt)'
+        : gstType === 'VAT'
+            ? 'VAT Amount'
+            : 'GST Amount';
 
     return (
         <div className="item-row">
@@ -78,7 +87,7 @@ function ItemRow({ item, index, gstRate, onChange, onRemove }) {
             </div>
             <div className="item-totals">
                 <div className="form-group">
-                    <label>GST Amount</label>
+                    <label>{taxLabel}</label>
                     <input type="text" readOnly value={gstAmount.toFixed(2)} />
                 </div>
                 <div className="form-group">
@@ -91,3 +100,4 @@ function ItemRow({ item, index, gstRate, onChange, onRemove }) {
 }
 
 export default ItemRow;
+
