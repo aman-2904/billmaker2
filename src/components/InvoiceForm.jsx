@@ -159,6 +159,31 @@ function InvoiceForm({
             <section className="form-section">
                 <h2>Invoice Details</h2>
                 <div className="form-grid">
+                    <div className="form-group full-width">
+                        <label>Invoice Title *</label>
+                        <div className="gst-type-options" style={{ display: 'flex', gap: '20px', marginTop: '8px' }}>
+                            <label className="gst-option" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                <input
+                                    type="radio"
+                                    name="invoiceTitle"
+                                    value="TAX INVOICE"
+                                    checked={formData.invoiceTitle === 'TAX INVOICE' || !formData.invoiceTitle}
+                                    onChange={(e) => onFormChange('invoiceTitle', e.target.value)}
+                                />
+                                TAX INVOICE
+                            </label>
+                            <label className="gst-option" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                <input
+                                    type="radio"
+                                    name="invoiceTitle"
+                                    value="PROFORMA INVOICE"
+                                    checked={formData.invoiceTitle === 'PROFORMA INVOICE'}
+                                    onChange={(e) => onFormChange('invoiceTitle', e.target.value)}
+                                />
+                                PROFORMA INVOICE
+                            </label>
+                        </div>
+                    </div>
                     <div className="form-group">
                         <label htmlFor="invoiceNumber">Invoice Number *</label>
                         <input

@@ -90,7 +90,7 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, vatRate,
 
                 {/* Tax Invoice Title */}
                 <div className="invoice-title-bar">
-                    <h1 className="invoice-title">TAX INVOICE</h1>
+                    <h1 className="invoice-title">{formData.invoiceTitle || 'TAX INVOICE'}</h1>
                 </div>
 
                 {/* Main Invoice Content */}

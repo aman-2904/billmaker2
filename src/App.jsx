@@ -55,7 +55,8 @@ function App() {
     poDate: '',
     dispatchThrough: '',
     destination: '',
-    termsOfDelivery: ''
+    termsOfDelivery: '',
+    invoiceTitle: 'TAX INVOICE'
   });
 
   const [items, setItems] = useState([
@@ -131,7 +132,8 @@ function App() {
         poDate: '',
         dispatchThrough: '',
         destination: '',
-        termsOfDelivery: ''
+        termsOfDelivery: '',
+        invoiceTitle: 'TAX INVOICE'
       });
       setItems([{ id: 1, description: '', hsn: '', unit: 1, amount: 0 }]);
       setGstRate(18);
@@ -199,7 +201,8 @@ function App() {
           dispatchThrough: formData.dispatchThrough,
           destination: formData.destination,
           termsOfDelivery: formData.termsOfDelivery,
-          gstType: gstType
+          gstType: gstType,
+          invoiceTitle: formData.invoiceTitle
         },
         items: items,
         gstRate: gstRate,
@@ -236,7 +239,8 @@ function App() {
       poDate: quotation.invoice_details?.poDate || '',
       dispatchThrough: quotation.invoice_details?.dispatchThrough || '',
       destination: quotation.invoice_details?.destination || '',
-      termsOfDelivery: quotation.invoice_details?.termsOfDelivery || ''
+      termsOfDelivery: quotation.invoice_details?.termsOfDelivery || '',
+      invoiceTitle: quotation.invoice_details?.invoiceTitle || 'TAX INVOICE'
     }));
     setGstType(quotation.invoice_details?.gstType || '');
     setItems((quotation.items || []).map(item => ({
@@ -313,7 +317,8 @@ function App() {
           dispatchThrough: formData.dispatchThrough,
           destination: formData.destination,
           termsOfDelivery: formData.termsOfDelivery,
-          gstType: gstType
+          gstType: gstType,
+          invoiceTitle: formData.invoiceTitle
         },
         items: items,
         gstRate: gstRate,
