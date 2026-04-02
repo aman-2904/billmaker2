@@ -56,7 +56,8 @@ function App() {
     dispatchThrough: '',
     destination: '',
     termsOfDelivery: '',
-    invoiceTitle: 'TAX INVOICE'
+    invoiceTitle: 'TAX INVOICE',
+    includeSignature: true
   });
 
   const [items, setItems] = useState([
@@ -133,7 +134,8 @@ function App() {
         dispatchThrough: '',
         destination: '',
         termsOfDelivery: '',
-        invoiceTitle: 'TAX INVOICE'
+        invoiceTitle: 'TAX INVOICE',
+        includeSignature: true
       });
       setItems([{ id: 1, description: '', hsn: '', unit: 1, amount: 0 }]);
       setGstRate(18);
@@ -202,7 +204,8 @@ function App() {
           destination: formData.destination,
           termsOfDelivery: formData.termsOfDelivery,
           gstType: gstType,
-          invoiceTitle: formData.invoiceTitle
+          invoiceTitle: formData.invoiceTitle,
+          includeSignature: formData.includeSignature
         },
         items: items,
         gstRate: gstRate,
@@ -240,7 +243,8 @@ function App() {
       dispatchThrough: quotation.invoice_details?.dispatchThrough || '',
       destination: quotation.invoice_details?.destination || '',
       termsOfDelivery: quotation.invoice_details?.termsOfDelivery || '',
-      invoiceTitle: quotation.invoice_details?.invoiceTitle || 'TAX INVOICE'
+      invoiceTitle: quotation.invoice_details?.invoiceTitle || 'TAX INVOICE',
+      includeSignature: quotation.invoice_details?.includeSignature !== undefined ? quotation.invoice_details.includeSignature : true
     }));
     setGstType(quotation.invoice_details?.gstType || '');
     setItems((quotation.items || []).map(item => ({

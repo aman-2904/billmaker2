@@ -113,6 +113,16 @@ function InvoiceForm({
                             placeholder="AN EVENT MANAGEMENT COMPANY"
                         />
                     </div>
+                    <div className="form-group full-width">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                checked={formData.includeSignature}
+                                onChange={(e) => onFormChange('includeSignature', e.target.checked)}
+                            />
+                            Include Authorized Signature in PDF
+                        </label>
+                    </div>
                 </div>
             </section>
 

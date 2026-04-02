@@ -300,21 +300,23 @@ const InvoicePreview = forwardRef(({ formData, items, gstRate, gstType, vatRate,
                             </div>
                         </div>
                         <div className="footer-right">
-                            <div className="stamp-area">
-                                <div className="stamp-placeholder">For {formData.sellerName.toUpperCase()}</div>
-                                {signatureBase64 || formData.sellerSignature ? (
-                                    <div className="signature-container" style={{ marginTop: '10px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <img
-                                            src={signatureBase64 || formData.sellerSignature}
-                                            alt="Authorized Signature"
-                                            style={{ maxHeight: '60px', maxWidth: '100%', objectFit: 'contain' }}
-                                        />
-                                    </div>
-                                ) : (
-                                    <div style={{ height: '60px' }}></div>
-                                )}
-                                <div className="auth-signatory">Authorized Signatory</div>
-                            </div>
+                            {formData.includeSignature && (
+                                <div className="stamp-area">
+                                    <div className="stamp-placeholder">For {formData.sellerName.toUpperCase()}</div>
+                                    {signatureBase64 || formData.sellerSignature ? (
+                                        <div className="signature-container" style={{ marginTop: '10px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <img
+                                                src={signatureBase64 || formData.sellerSignature}
+                                                alt="Authorized Signature"
+                                                style={{ maxHeight: '60px', maxWidth: '100%', objectFit: 'contain' }}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div style={{ height: '60px' }}></div>
+                                    )}
+                                    <div className="auth-signatory">Authorized Signatory</div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
