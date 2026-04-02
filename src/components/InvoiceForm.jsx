@@ -196,13 +196,12 @@ function InvoiceForm({
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="invoiceDate">Invoice Date *</label>
+                        <label htmlFor="invoiceDate">Invoice Date</label>
                         <input
                             type="date"
                             id="invoiceDate"
                             value={formData.invoiceDate}
                             onChange={(e) => onFormChange('invoiceDate', e.target.value)}
-                            required
                         />
                     </div>
                     <div className="form-group">

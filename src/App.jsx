@@ -261,8 +261,7 @@ function App() {
       { field: 'sellerEmail', label: 'Seller Email' },
       { field: 'buyerName', label: 'Buyer Name' },
       { field: 'buyerAddress', label: 'Buyer Address' },
-      { field: 'invoiceNumber', label: 'Invoice Number' },
-      { field: 'invoiceDate', label: 'Invoice Date' }
+      { field: 'invoiceNumber', label: 'Invoice Number' }
     ];
 
     for (const { field, label } of requiredFields) {
