@@ -196,7 +196,19 @@ function InvoiceForm({
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="invoiceDate">Invoice Date</label>
+                        <div className="label-with-action">
+                            <label htmlFor="invoiceDate">Invoice Date</label>
+                            {formData.invoiceDate && (
+                                <button
+                                    type="button"
+                                    className="btn-clear-date"
+                                    onClick={() => onFormChange('invoiceDate', '')}
+                                    title="Clear Date"
+                                >
+                                    <Icons.X size={ICON_SIZES.sm} /> Remove Date
+                                </button>
+                            )}
+                        </div>
                         <input
                             type="date"
                             id="invoiceDate"

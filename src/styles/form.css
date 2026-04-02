@@ -192,6 +192,36 @@ body {
     letter-spacing: 0.2px;
 }
 
+.label-with-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.label-with-action label {
+    margin-bottom: 0;
+}
+
+.btn-clear-date {
+    background: transparent;
+    color: #ff3b30;
+    border: none;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-clear-date:hover {
+    background: rgba(255, 59, 48, 0.1);
+}
+
 .form-group input,
 .form-group textarea,
 .form-group select {
