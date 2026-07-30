@@ -403,8 +403,9 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <header className="app-header">
+    <>
+      <div className="container">
+        <header className="app-header">
         <h1>Invoice Maker</h1>
 
         <button
@@ -466,7 +467,9 @@ function App() {
         amountInWords={amountInWords}
       />
 
-      {/* Modals */}
+      </div>
+
+      {/* Modals - Placed outside container to avoid backdrop-filter containing block issue */}
       <CompanyManager
         isOpen={showCompanyManager}
         onClose={() => setShowCompanyManager(false)}
@@ -487,9 +490,6 @@ function App() {
         }}
       />
 
-
-
-      {/* Buyer Manager Modal */}
       <BuyerManager
         isOpen={showBuyerManager}
         onClose={() => setShowBuyerManager(false)}
@@ -505,7 +505,7 @@ function App() {
         onClose={() => setShowQuotationList(false)}
         onLoadQuotation={handleLoadQuotation}
       />
-    </div>
+    </>
   );
 }
 

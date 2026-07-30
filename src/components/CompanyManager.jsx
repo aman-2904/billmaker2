@@ -311,6 +311,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
 
                 <div className="modal-body">
                     {/* Company List */}
+                    {!editingCompany && !showNewCompanyForm && (
                     <div className="company-list">
                         <div className="list-header">
                             <h3>Saved Companies</h3>
@@ -350,6 +351,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                             </div>
                         )}
                     </div>
+                    )}
 
                     {/* Quick Add Company Form */}
                     {showNewCompanyForm && (

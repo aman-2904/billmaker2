@@ -238,6 +238,7 @@ function BuyerManager({ isOpen, onClose, onBuyerSaved }) {
 
                 <div className="modal-body">
                     {/* Buyer List */}
+                    {!editingBuyer && !showNewBuyerForm && (
                     <div className="company-list">
                         <div className="list-header">
                             <h3>Saved Buyers</h3>
@@ -278,6 +279,7 @@ function BuyerManager({ isOpen, onClose, onBuyerSaved }) {
                             </div>
                         )}
                     </div>
+                    )}
 
                     {/* Quick Add Buyer Form */}
                     {showNewBuyerForm && (
