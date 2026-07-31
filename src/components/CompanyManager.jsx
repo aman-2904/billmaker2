@@ -7,6 +7,11 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
     const [editingCompany, setEditingCompany] = useState(null);
     const [showNewCompanyForm, setShowNewCompanyForm] = useState(false);
 
+    // Delete confirmation state
+    const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+    const [deletePassword, setDeletePassword] = useState('');
+    const [deleteError, setDeleteError] = useState('');
+
     // Quick add form state - all fields
     const [newCompanyData, setNewCompanyData] = useState({
         companyName: '',
@@ -277,19 +282,27 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
         }
     }
 
-    async function handleDelete(id) {
-        if (!confirm('Are you sure you want to delete this company?')) {
+    function initiateDelete(id) {
+        setDeleteConfirmId(id);
+        setDeletePassword('');
+        setDeleteError('');
+    }
+
+    async function confirmDelete() {
+        if (deletePassword !== 'Shaadi@2025#') {
+            setDeleteError('Incorrect password');
             return;
         }
 
         try {
             setLoading(true);
-            await deleteCompany(id);
+            await deleteCompany(deleteConfirmId);
             await loadCompanies();
             alert('Company deleted successfully!');
+            setDeleteConfirmId(null);
         } catch (err) {
             const errorMessage = err.message || 'Failed to delete company';
-            setError(`Failed to delete company: ${errorMessage}`);
+            setDeleteError(`Failed to delete company: ${errorMessage}`);
             console.error('❌ Delete error:', err);
             alert(`Error: ${errorMessage}`);
         } finally {
@@ -311,7 +324,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
 
                 <div className="modal-body">
                     {/* Company List */}
-                    {!editingCompany && !showNewCompanyForm && (
+                    {!editingCompany && !showNewCompanyForm && !deleteConfirmId && (
                     <div className="company-list">
                         <div className="list-header">
                             <h3>Saved Companies</h3>
@@ -341,7 +354,7 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                             </button>
                                             <button
                                                 className="btn-delete"
-                                                onClick={() => handleDelete(company.id)}
+                                                onClick={() => initiateDelete(company.id)}
                                             >
                                                 <Icons.Trash2 size={ICON_SIZES.sm} /> Delete
                                             </button>
@@ -699,6 +712,57 @@ function CompanyManager({ isOpen, onClose, onCompanySaved, currentFormData }) {
                                     disabled={loading}
                                 >
                                     {loading ? 'Saving...' : editingCompany ? 'Update Company' : 'Save Company'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Delete Confirmation Modal */}
+                    {deleteConfirmId && (
+                        <div className="quick-add-form" style={{ marginTop: '20px' }}>
+                            <div className="quick-add-header">
+                                <h3><Icons.Trash2 size={ICON_SIZES.md} /> Confirm Delete</h3>
+                                <button
+                                    type="button"
+                                    className="btn-close-small"
+                                    onClick={() => setDeleteConfirmId(null)}
+                                    disabled={loading}
+                                >
+                                    <Icons.X size={ICON_SIZES.md} />
+                                </button>
+                            </div>
+
+                            <div className="quick-add-fields">
+                                <div className="form-group full-width">
+                                    <label>Enter Password to Confirm Delete</label>
+                                    <input
+                                        type="password"
+                                        value={deletePassword}
+                                        onChange={(e) => setDeletePassword(e.target.value)}
+                                        placeholder="Password"
+                                        disabled={loading}
+                                        autoFocus
+                                    />
+                                    {deleteError && <div className="error-message" style={{ marginTop: '10px' }}>{deleteError}</div>}
+                                </div>
+                            </div>
+
+                            <div className="quick-add-actions">
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => setDeleteConfirmId(null)}
+                                    disabled={loading}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn-delete"
+                                    onClick={confirmDelete}
+                                    disabled={loading}
+                                >
+                                    {loading ? <><Icons.Loader2 size={ICON_SIZES.md} className="spinning" /> Deleting...</> : <><Icons.Trash2 size={ICON_SIZES.md} /> Delete Company</>}
                                 </button>
                             </div>
                         </div>
